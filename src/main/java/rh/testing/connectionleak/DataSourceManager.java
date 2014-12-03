@@ -51,7 +51,15 @@ public class DataSourceManager {
         
     }
     
-    public Connection connect() {
+    /**
+     * Allows a connection to be created, managed or unmanaged, for the
+     * datasource to be contacted.  Managed connections are later subject
+     * to automatic pruning in the event of a leak.
+     * 
+     * @param manage
+     * @return
+     */
+    public Connection connect(boolean manage) {
         try {
             // try and get a connection
             Connection connection = this.source.getConnection();
@@ -62,8 +70,11 @@ public class DataSourceManager {
                connection = this.source.getConnection();
             }
             
-            // add/update new date, it most likely won't collide but if it does... it just "counts" as a reset
-            this.connectionTracker.put(connection, new Date());
+            // manage the connection (?)
+            if(manage) {
+                // add/update new date, it most likely won't collide but if it does... it just "counts" as a reset
+                this.connectionTracker.put(connection, new Date());
+            }
         
             return connection;
         } catch (SQLException e) {
