@@ -10,12 +10,8 @@ that doesn't change a few key facts:
 * We need them to not break the server
 
 And it's really that last part that is the most important.  We need to come up with a way to stop the server from breaking.
-  But along the way I figured quite a few things out.  
 
-There's also a few things to remember about "idle" connections.  They're only idle if they have been *returned to the pool*.
-So what that boils down to is that if you orphan a connection *it will never be idle.*
-  
-The first is that the CCM ([use-ccm](https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/6.3/html/Administration_and_Configuration_Guide/sect-Datasource_Configuration.html)) 
+The CCM ([use-ccm](https://access.redhat.com/documentation/en-US/JBoss_Enterprise_Application_Platform/6.3/html/Administration_and_Configuration_Guide/sect-Datasource_Configuration.html)) 
 should really be your first ticket out of trouble.  It **should** let you know when you are experiencing a leak and 
 it should also deal with it, for the time being, if you configure it correctly.  The most relevant documentation I 
 found is: [here](https://access.redhat.com/solutions/309913).  (RHN required.)
@@ -25,6 +21,9 @@ sure that you have 'INFO' logging turned on for the "org.jboss.jca" package in y
 
 Okay, so you've done that and MABYE you're still not having your leaks dealt with.  I found out, the hard way, that having
 `jta="false"` in your datasource definition will *also* cause the CCM to not close orphaned connections.  Fantasic!
+
+(You can fiddle around with your timeout options but... there's also a few things to remember about "idle" connections.  They're only idle if they have been *returned to the pool*.
+So what that boils down to is that if you orphan a connection *it will never be idle.*)
 
 So, what did I decide to do about it?  After batting around MANY different ideas (like watching the transaction status... 
 which is pretty much what the CCM does to notify you of an orphaned connection) I settled on just keeping a list
