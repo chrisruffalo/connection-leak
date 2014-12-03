@@ -1,0 +1,29 @@
+<!--
+Notes:
+ * Turning jta to true is REQUIRED for the CCM to do it's connection leak magic
+ * "Idle" connections are only considered idle when returned to the pool
+ * Similarly connections are only checked in the background if they are in the pool
+ -->
+<datasource jta="false" jndi-name="java:jboss/datasources/LeakTestDS" pool-name="leaktest" enabled="true" use-ccm="true">
+    <connection-url>jdbc:postgresql://localhost/leaktest</connection-url>
+    <driver-class>org.postgresql.Driver</driver-class>
+    <driver>postgresql-9.3-1101.jdbc4.jar</driver>
+    <pool>
+        <min-pool-size>1</min-pool-size>
+        <max-pool-size>5</max-pool-size>
+    </pool>
+    <security>
+        <user-name>leaktest</user-name>
+        <password>leaktest</password>
+    </security>
+    <validation>
+        <valid-connection-checker class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLValidConnectionChecker"/>
+        <background-validation>true</background-validation>
+        <background-validation-millis>90000</background-validation-millis>
+        <exception-sorter class-name="org.jboss.jca.adapters.jdbc.extensions.postgres.PostgreSQLExceptionSorter"/>
+    </validation>
+    <timeout>
+        <idle-timeout-minutes>3</idle-timeout-minutes>
+        <query-timeout>300</query-timeout>
+    </timeout>
+</datasource>
