@@ -31,7 +31,7 @@ of the connections and when they were created.  Then you can use an EJB timer to
 closed themselves (were properly returned to the pool) and then you can forcibly close the old ones (which will
 also return them to the pool).  As a bonus the connection manager also closes orphans when it is destroyed.
 
-There are the components of this example project:
+Components of this example project:
 
 * `DataSourceManager` - Creates and tracks all of the connection objects.
 * `PruneTimer` - simple EJB timer that causes the prune action to happen every N seconds.  (15 in this case.)
@@ -48,5 +48,4 @@ if you hit a certain threshold (like 50% or 75% full).  You could investigate be
 for use in storing the tracked connections.  You could add metadata to the connection that tracked where it was
 used so that you could try and track down the leak.
 
-This is just a sample project that shows how it can happen, how you can control it for testing, and how you can potentially
-deal with it.
+This is just a sample project that shows how it can happen, how you can control it for testing, and how you can potentially deal with it.
