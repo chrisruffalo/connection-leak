@@ -73,7 +73,7 @@ public class TestServlet extends HttpServlet {
             return;
         }
 
-        // start a transaction
+        // set a savepoint for rollback
         Savepoint point = null;
         try {
             point = connection.setSavepoint();
@@ -177,7 +177,7 @@ public class TestServlet extends HttpServlet {
             this.logger.warning("Could not get results: " + e.getMessage());
         }
         
-        // finish the transaction
+        // release the savepoint and commit the changes
         if(point != null) {
             // stop using the savepoint
             try {
